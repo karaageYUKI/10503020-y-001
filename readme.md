@@ -1,4 +1,6 @@
-# B95 EX  
+# 概要  
+
+改造インスタンスのリポジトリです。  
 
 - 偽装ページ✓  
 - YouTube✓
@@ -13,7 +15,7 @@
 - [EX(電卓版)](https://github.com/beta9514/B95_EX-calculator)
 # デプロイ  
 
-Renderの垢を持っていればここからデプロイできます。  
+Renderのアカウントを持っていればここからデプロイできます。  
 <a href="https://render.com/deploy?repo=https://github.com/beta9514/B95_ex">
 <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render">
 </a>
