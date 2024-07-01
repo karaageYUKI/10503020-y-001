@@ -302,13 +302,7 @@ def view_forms(request: Request, yuki: Union[str] = Cookie(None)):
 
 @app.get("/schedule", response_class=PlainTextResponse)
 def view_schedule(request: Request, yuki: Union[str] = Cookie(None)):
-    response = requests.get("https://raw.githubusercontent.com/beta9514/other/main/ex1_schedule.txt")
-    html_content = response.text
-    return html_content
-
-@app.get("/ex3about", response_class=PlainTextResponse)
-def view_ex3about(request: Request, yuki: Union[str] = Cookie(None)):
-    response = requests.get("https://raw.githubusercontent.com/beta9514/about/main/ex3_about.txt")
+    response = requests.get("https://raw.githubusercontent.com/beta9514/about/main/ex1_schedule.txt")
     html_content = response.text
     return html_content
 
