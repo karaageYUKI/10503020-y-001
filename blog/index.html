@@ -5,6 +5,37 @@
     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
     <meta charset='utf-8'>
     <title>ログイン</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .login-container input[type="button"] {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #info {
+            margin-top: 20px;
+            color: red;
+        }
+    </style>
     <script>
         function getlevel() {
             let password = prompt("パスワードを入力してください:");
@@ -23,7 +54,10 @@
     </script>
 </head>
 <body>
-    <input type="button" onClick="getlevel()" value="認証"></input>
-    <div id="info"></div>
+    <div class="login-container">
+        <h2>ログイン</h2>
+        <input type="button" onClick="getlevel()" value="認証"></input>
+        <div id="info"></div>
+    </div>
 </body>
 </html>
