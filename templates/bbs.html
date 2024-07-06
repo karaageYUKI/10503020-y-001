@@ -591,6 +591,7 @@ elements.filter.addEventListener('change', () => {
      return str.replace(regexp_c, (_, cId) => `${currentUrl}/channel/${cId}`)
              .replace(regexp_watch, (_, videoId) => `${currentUrl}/watch?v=${videoId}`)
              .replace(regexp_url, (all, url, h, href) => `<a href="h${href}" target="_blank">${url}</a>`);
+ }
 
 // メッセージを自動で読み込む
 function reloadmessages() {
