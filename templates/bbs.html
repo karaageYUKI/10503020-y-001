@@ -585,7 +585,7 @@ elements.filter.addEventListener('change', () => {
 // 自動リンク化
  function AutoLink(str) {
      const currentUrl = window.location.origin.match(/https?:\/\/[^\/]+\.com/)[0];
-     const regexp_url = /((h?)(ttps?:\/\/[\w\.\/\?=&;#~\-]+\/[^\s]*/g;
+     const regexp_url = /((h?)(ttps?:\/\/[\w\.\/\?=&;#~\-]+\/[^\s]*)/g;
      const regexp_watch = /\/watch\?v=([A-Za-z0-9_-]+)/g;
      const regexp_c = /\/channel\/([A-Za-z0-9_-]+)/g;
      return str.replace(regexp_c, (_, cId) => `${currentUrl}/channel/${cId}`)
