@@ -582,48 +582,15 @@ elements.filter.addEventListener('change', () => {
     localStorage.setItem('filterChecked', elements.filter.checked);
 });
 
-// 自動リンク化
-function AutoLink(str) {
-    // 現在のページのドメインを取得
-    const currentUrl = window.location.origin;
-
-    // 正規表現の定義
-    const regexp_url = /(\b(?:https?:\/\/|ftp:\/\/|www\.)[^\s<]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/g;
-    const regexp_watch = /\/watch\?v=([A-Za-z0-9_-]+)/g;
-    const regexp_channel = /\/channel\/([A-Za-z0-9_-]+)/g;
-
-    // エスケープ処理（XSS防止）
-    const escapeHtml = (unsafe) => {
-        return unsafe.replace(/[&<"']/g, (match) => {
-            switch (match) {
-                case '&':
-                    return '&amp;';
-                case '<':
-                    return '&lt;';
-                case '>':
-                    return '&gt;';
-                case '"':
-                    return '&quot;';
-                case "'":
-                    return '&#039;';
-                default:
-                    return match;
-            }
-        });
-    };
-
-    // URLをリンクに変換
-    const linkedStr = str
-        .replace(regexp_channel, (_, cId) => `${currentUrl}/channel/${cId}`)
-        .replace(regexp_watch, (_, videoId) => `${currentUrl}/watch?v=${videoId}`)
-        .replace(regexp_url, (url) => {
-            // プロトコルがない場合の処理
-            const href = url.startsWith('http') || url.startsWith('ftp') ? url : `http://${url}`;
-            return `<a href="${href}" target="_blank">${escapeHtml(url)}</a>`;
-        });
-
-    return escapeHtml(linkedStr);
-}
+    // 自動リンク化
+ function AutoLink(str) {
+     const currentUrl = window.location.origin.match(/https?:\/\/[^\/]+\.com/)[0];
+     const regexp_url = /((h?)(ttps?:\/\/[\w\.\/\?=&;#~\-]+[^<\s])(\s)*)/g;
+     const regexp_watch = /\/watch\?v=([A-Za-z0-9_-]+)/g;
+     const regexp_c = /\/channel\/([A-Za-z0-9_-]+)/g;
+     return str.replace(regexp_c, (_, cId) => `${currentUrl}/channel/${cId}`)
+             .replace(regexp_watch, (_, videoId) => `${currentUrl}/watch?v=${videoId}`)
+             .replace(regexp_url, (all, url, h, href) => `<a href="h${href}" target="_blank">${url}</a>`);
 
 // メッセージを自動で読み込む
 function reloadmessages() {
