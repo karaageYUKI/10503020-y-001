@@ -459,6 +459,8 @@ height: calc(100% - 30px);
             <option value="/release">/release</option>
             <option value="/revive">/revive</option>
             <option value="/stop ">/stop</option>
+            <option value="/prevent">/prevent</option>
+            <option value="/permit">/permit</option>
             <option value="/kill ">/kill</option>
             <option value="/ban ">/ban</option>
             <option value="/topic ">/topic</option>
@@ -667,7 +669,7 @@ checkRequired(elements.kaomojiselect,[
 'ꪔ̤̫‪'
 ], 'required');
 checkRequired(elements.messageselect, ['時報お疲れ様', 'じほおつ', 'ぬ', 't'], 'required');
-checkRequired(elements.command, ['/disself', '/restrict', '/release', '/revive'], 'required');
+checkRequired(elements.command, ['/disself', '/restrict', '/release', '/revive','/prevent','permit'], 'required');
 
 // 時計の表示
 function displayTime() {
