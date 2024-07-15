@@ -182,13 +182,26 @@ height: calc(100% - 30px);
             text-align: start;
             color: #5e5e5e;
         }
+        .random-string {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.random-string button {
+    margin-left: 10px;
+}
+
+.controls {
+    margin-bottom: 10px;
+}
     </style>
 </head>
 <body>
     <!--window-->
     <select id="windowSelect">
         <option value="">リセットするウィンドウを選択</option>
-        <option value="appWindow1">window1</option>
+        <option value="appWindow1">シードジェネレーター</option>
         <option value="appWindow2">window2</option>
       </select>
       <input type="checkbox" id="resetSizeCheckbox"> サイズ
@@ -198,11 +211,90 @@ height: calc(100% - 30px);
   
       
       <div class="window" id="appWindow1">
-        <div class="window-header" id="dragHandle1">window1</div>
+        <div class="window-header" id="dragHandle1">シードジェネレーター</div>
         <button class="close-button" onclick="closeWindow('appWindow1')">×</button>
         <div class="resize-handle" id="resizeHandle1"></div>
         <div class="window-content">
-          そのうち何か追加します((((
+          <div class="controls">
+            <label for="length">文字数: </label>
+            <input type="number" id="length" min="1" max="100" value="10">
+            <label for="count">生成個数: </label>
+            <input type="number" id="count" min="1" max="100" value="5">
+            <button onclick="generateRandomStrings()">生成</button>
+            <button onclick="resetStrings()">リセット</button>
+        </div>
+        <div id="randomStrings"></div>
+    </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    loadRandomStrings();
+
+    document.getElementById("count").addEventListener("input", function() {
+        const value = this.value;
+        if (value < 1) this.value = 1;
+        if (value > 100) this.value = 100;
+    });
+
+    document.getElementById("length").addEventListener("input", function() {
+        const value = this.value;
+        if (value < 1) this.value = 1;
+        if (value > 100) this.value = 100;
+    });
+});
+
+function generateRandomStrings() {
+    const length = document.getElementById("length").value;
+    const count = document.getElementById("count").value;
+    const randomStringsContainer = document.getElementById("randomStrings");
+    randomStringsContainer.innerHTML = '';
+
+    for (let i = 0; i < count; i++) {
+        const randomString = generateRandomString(length);
+        const stringElement = document.createElement("div");
+        stringElement.className = "random-string";
+        stringElement.innerHTML = `<span>${randomString}</span><button onclick="copyToClipboard('${randomString}')">コピー</button>`;
+        randomStringsContainer.appendChild(stringElement);
+    }
+
+    saveRandomStrings();
+}
+
+function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters[randomIndex];
+    }
+    return result;
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert("コピーしました: " + text);
+    });
+}
+
+function resetStrings() {
+    document.getElementById("randomStrings").innerHTML = '';
+    localStorage.removeItem("randomStrings");
+}
+
+function saveRandomStrings() {
+    const randomStringsContainer = document.getElementById("randomStrings");
+    localStorage.setItem("randomStrings", randomStringsContainer.innerHTML);
+}
+
+function loadRandomStrings() {
+    const savedStrings = localStorage.getItem("randomStrings");
+    if (savedStrings) {
+        document.getElementById("randomStrings").innerHTML = savedStrings;
+    }
+}
+
+</script>
         </div>
       </div>
       
@@ -215,7 +307,7 @@ height: calc(100% - 30px);
         </div>
       </div>
       
-      <button onclick="showWindow('appWindow1')">window1</button>
+      <button onclick="showWindow('appWindow1')">シードジェネレーター</button>
       <button onclick="showWindow('appWindow2')">window2</button>
       <script>
       function resetSelectedWindowSize() {
@@ -495,6 +587,9 @@ height: calc(100% - 30px);
             <option value="(¦3[▓▓]">(¦3[▓▓]</option>
             <option value="(:3[▓▓]">(:3[▓▓]</option>
             <option value="ꪔ̤̫‪">ꪔ̤̫‪</option>
+            <option value=" (¯-¯)ﾌｰﾝ"> (¯-¯)ﾌｰﾝ</option>
+            <option value="(◎-◎;)!!">(◎-◎;)!!</option>
+            <option value="( ?´_ゝ｀)">( ?´_ゝ｀)</option>
         </select>
     </div>
     <br/>
@@ -666,7 +761,10 @@ checkRequired(elements.kaomojiselect,[
 '( ˘ω˘)ｽﾔｧ',
 '(¦3[▓▓]',
 '(:3[▓▓]',
-'ꪔ̤̫‪'
+'ꪔ̤̫‪',
+'( ?´_ゝ｀)',
+'(¯-¯)ﾌｰﾝ',
+'(◎-◎;)!!'
 ], 'required');
 checkRequired(elements.messageselect, ['時報お疲れ様', 'じほおつ', 'ぬ', 't'], 'required');
 checkRequired(elements.command, ['/disself', '/restrict', '/release', '/revive','/prevent','permit'], 'required');
