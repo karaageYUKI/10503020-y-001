@@ -288,13 +288,13 @@ def how_cached():
 
 @app.get("/bbs/how", response_class=PlainTextResponse)
 def view_schedule(request: Request, yuki: Union[str] = Cookie(None)):
-    response = requests.get("https://raw.githubusercontent.com/beta9514/about/main/how.txt")
+    response = requests.get("https://raw.githubusercontent.com/beta9514/texts/main/how.txt")
     html_content = response.text
     return html_content
 
 @app.get("/about", response_class=PlainTextResponse)
 def view_about(request: Request, yuki: Union[str] = Cookie(None)):
-    response = requests.get("https://raw.githubusercontent.com/beta9514/about/main/about.txt")
+    response = requests.get("https://raw.githubusercontent.com/beta9514/texts/main/about.txt")
     html_content = response.text
     return html_content
 
@@ -304,7 +304,7 @@ def view_forms(request: Request, yuki: Union[str] = Cookie(None)):
 
 @app.get("/schedule", response_class=PlainTextResponse)
 def view_schedule(request: Request, yuki: Union[str] = Cookie(None)):
-    response = requests.get("https://raw.githubusercontent.com/beta9514/about/main/schedule.txt")
+    response = requests.get("https://raw.githubusercontent.com/beta9514/texts/main/schedule.txt")
     html_content = response.text
     return html_content
 
