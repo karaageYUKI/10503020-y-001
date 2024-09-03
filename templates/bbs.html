@@ -69,19 +69,19 @@ assignRandomCookie();
 }
 
 .window {
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 250px;
   background-color: #707070;
   border: 1px solid #3f3f3f;
   position: absolute;
-  top: 75px;
+  top: 55px;
   left: 75px;
   cursor: move;
   overflow: hidden;
 }
 
 .window-header {
-  background-color: #3f3f3f;
+  background-color: #5a5a5a;
   padding: 5px;
   cursor: move;
 }
@@ -94,8 +94,8 @@ overflow: auto;
 
 
 .resize-handle {
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   background-color: #474747;
   position: absolute;
   bottom: 0;
@@ -180,30 +180,17 @@ overflow: auto;
 
         .clock {
             font-size: 30px;
-            text-align: start;
-            color: #5e5e5e;
+            text-align: center;
+            color: #0b0b0b;
         }
-        .random-string {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-}
-
-.random-string button {
-    margin-left: 10px;
-}
-
-.controls {
-    margin-bottom: 10px;
-}
     </style>
 </head>
 <body>
     <!--window-->
     <select id="windowSelect">
         <option value="">リセットするウィンドウを選択</option>
-        <option value="appWindow1">シードジェネレーター</option>
-        <option value="appWindow2">window2</option>
+        <option value="appWindow1">時計</option>
+        <option value="appWindow2">メモ帳</option>
       </select>
       <input type="checkbox" id="resetSizeCheckbox"> サイズ
       <input type="checkbox" id="resetPositionCheckbox"> 位置
@@ -212,104 +199,90 @@ overflow: auto;
   
       
       <div class="window" id="appWindow1">
-        <div class="window-header" id="dragHandle1">シードジェネレーター</div>
+        <div class="window-header" id="dragHandle1">時計</div>
         <button class="close-button" onclick="closeWindow('appWindow1')">×</button>
         <div class="resize-handle" id="resizeHandle1"></div>
         <div class="window-content">
-          <div class="controls">
-            <label for="length">文字数: </label>
-            <input type="number" id="length" min="1" max="100" value="10">
-            <label for="count">生成個数: </label>
-            <input type="number" id="count" min="1" max="100" value="5">
-            <button onclick="generateRandomStrings()">生成</button>
-            <button onclick="resetStrings()">リセット</button>
-        </div>
-        <div id="randomStrings"></div>
+          <div class="clock"></div>
     </div>
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    loadRandomStrings();
-
-    document.getElementById("count").addEventListener("input", function() {
-        const value = this.value;
-        if (value < 1) this.value = 1;
-        if (value > 100) this.value = 100;
-    });
-
-    document.getElementById("length").addEventListener("input", function() {
-        const value = this.value;
-        if (value < 1) this.value = 1;
-        if (value > 100) this.value = 100;
-    });
-});
-
-function generateRandomStrings() {
-    const length = document.getElementById("length").value;
-    const count = document.getElementById("count").value;
-    const randomStringsContainer = document.getElementById("randomStrings");
-    randomStringsContainer.innerHTML = '';
-
-    for (let i = 0; i < count; i++) {
-        const randomString = generateRandomString(length);
-        const stringElement = document.createElement("div");
-        stringElement.className = "random-string";
-        stringElement.innerHTML = `<span>${randomString}</span><button onclick="copyToClipboard('${randomString}')">コピー</button>`;
-        randomStringsContainer.appendChild(stringElement);
-    }
-
-    saveRandomStrings();
+// 時計の表示
+function displayTime() {
+    const padZero = value => value.toString().padStart(2, '0');
+    const now = new Date();
+    const hours = now.getHours();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const h = padZero(hours % 12 || 12);
+    const currentTime = `${padZero(now.getMonth() + 1)}/${padZero(now.getDate())} ${h}:${padZero(now.getMinutes())}:${padZero(now.getSeconds())} ${ampm}`;
+    document.querySelector('.clock').textContent = currentTime;
 }
 
-function generateRandomString(length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        result += characters[randomIndex];
-    }
-    return result;
-}
-
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        alert("コピーしました: " + text);
-    });
-}
-
-function resetStrings() {
-    document.getElementById("randomStrings").innerHTML = '';
-    localStorage.removeItem("randomStrings");
-}
-
-function saveRandomStrings() {
-    const randomStringsContainer = document.getElementById("randomStrings");
-    localStorage.setItem("randomStrings", randomStringsContainer.innerHTML);
-}
-
-function loadRandomStrings() {
-    const savedStrings = localStorage.getItem("randomStrings");
-    if (savedStrings) {
-        document.getElementById("randomStrings").innerHTML = savedStrings;
-    }
-}
-
+displayTime();
+setInterval(displayTime, 1000);
 </script>
         </div>
       </div>
       
       <div class="window" id="appWindow2">
-        <div class="window-header" id="dragHandle2">window2</div>
+        <div class="window-header" id="dragHandle2">メモ帳</div>
         <button class="close-button" onclick="closeWindow('appWindow2')">×</button>
         <div class="resize-handle" id="resizeHandle2"></div>
         <div class="window-content">
-            そのうち何か追加します((((
+            <textarea id="noteArea" placeholder="ここに文字を入力…"></textarea>
+    <br>
+    <button id="saveButton">保存</button>
+    <button id="exportButton">出力</button>
+    <br><br>
+    <label for="fileName">ファイル名:</label>
+    <input type="text" id="fileName" placeholder="拡張子なしでファイル名を入力してください">
+    <br>
+    <label for="fileType">拡張子を選択:</label>
+    <select id="fileType">
+        <option value="txt">.txt</option>
+        <option value="md">.md</option>
+        <option value="html">.html</option>
+    </select>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const noteArea = document.getElementById("noteArea");
+        const saveButton = document.getElementById("saveButton");
+        const exportButton = document.getElementById("exportButton");
+        const fileTypeSelect = document.getElementById("fileType");
+        const fileNameInput = document.getElementById("fileName");
+    
+        // データを保存
+        noteArea.value = localStorage.getItem("savedNote") || "";
+    
+        // セーブボタン
+        saveButton.addEventListener("click", () => {
+            localStorage.setItem("savedNote", noteArea.value);
+            alert("内容を保存しました");
+        });
+    
+        // 出力
+        exportButton.addEventListener("click", () => {
+            const fileName = fileNameInput.value.trim() || "untitled"; // 名前を決めてなければ名前をUntitledで出力
+            const fileType = fileTypeSelect.value;
+            const fullFileName = `${fileName}.${fileType}`;
+            const blob = new Blob([noteArea.value], { type: "text/plain;charset=utf-8" });
+            
+            // ダウンロード
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = fullFileName;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        });
+    });
+    </script>
         </div>
       </div>
       
-      <button onclick="showWindow('appWindow1')">シードジェネレーター</button>
-      <button onclick="showWindow('appWindow2')">window2</button>
+      <button onclick="showWindow('appWindow1')">時計</button>
+      <button onclick="showWindow('appWindow2')">メモ帳</button>
       <script>
       function resetSelectedWindowSize() {
         var selectedWindowId = document.getElementById('windowSelect').value;
@@ -508,7 +481,7 @@ function loadRandomStrings() {
   resizeElementTouch(document.getElementById("appWindow2"));
     </script>
     <!--BBS-->
-<div class="clock"></div>
+    <br />
 <button id="darkmodeBtn">Light/Dark</button>
 <input type="color" id="colorPicker" value="#ffffff">
 <input type="text" id="colorCodeResult" placeholder="カラーコード" readonly>
@@ -630,7 +603,7 @@ function loadRandomStrings() {
 
 <div id="messages"></div>
 <script>
-// 要素の取得
+    // 要素の取得
 const elements = ['submit', 
 'msg', 
 'name', 
@@ -771,21 +744,6 @@ checkRequired(elements.kaomojiselect,[
 ], 'required');
 checkRequired(elements.messageselect, ['時報お疲れ様', 'じほおつ', 'ぬ', 't'], 'required');
 checkRequired(elements.command, ['/disself', '/restrict', '/release', '/revive','/prevent','permit'], 'required');
-
-// 時計の表示
-function displayTime() {
-    const padZero = value => value.toString().padStart(2, '0');
-    const now = new Date();
-    const hours = now.getHours();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const h = padZero(hours % 12 || 12);
-    const currentTime = `${padZero(now.getMonth() + 1)}/${padZero(now.getDate())} ${h}:${padZero(now.getMinutes())}:${padZero(now.getSeconds())} ${ampm}`;
-    document.querySelector('.clock').textContent = currentTime;
-}
-
-displayTime();
-setInterval(displayTime, 1000);
-
 </script>
 </body>
 </html>
